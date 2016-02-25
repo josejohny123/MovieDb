@@ -1,0 +1,40 @@
+package trg.hadoop.movieDB.TopTenVersion2;
+
+import java.io.IOException;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class RatingMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+	
+	public enum Rating {
+		 rating_lt_3,
+		 rating_ge_3,
+		 no_setup,no_reduce,no_cleanup,treemapCount
+	};
+	
+	@Override
+	protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+		String[] tokens = value.toString().split("\t");
+		
+		// String user_id;
+		String movie_id;
+		Integer rating;
+		// Long  recTime;
+		// Float avgRating;
+		
+		// user_id = tokens[0];
+		movie_id = tokens[1];
+		rating = Integer.valueOf(tokens[2]);
+		// recTime = Long.valueOf(tokens[3]);
+
+		if (rating < 3)
+			context.getCounter(Rating.rating_lt_3).increment(1);
+		else 
+			context.getCounter(Rating.rating_ge_3).increment(1);
+		
+		
+		context.write(new Text(movie_id), new IntWritable(rating));
+		}
+}
