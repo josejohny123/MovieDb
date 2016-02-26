@@ -1,0 +1,79 @@
+
+TopTen New Versio
+hadoop jar MovieTopTenVer2.jar trg.hadoop.movieDB.TopTenVersion2.RatingDriver /user/trg03/moviein /user/trg03/movieTopTenOut1710
+
+
+DC
+hadoop jar MovieDistCache.jar trg.hadoop.mapSideJoin.MovieRatingDriver /user/trg03/moviein /user/trg03/movieDistCasheout
+
+
+RDJ
+hadoop jar MovieReduceSideJoinjar.jar trg.hadoop.reduceSideJoin.MovieRSJDriver /user/trg03/userData  /user/trg03/moviein /user/trg03/movieReduceSideJoin
+
+
+Compare Movie Interest  Based on Occuppation
+// userID|Age|Gender|Occupation|PinCode
+
+// rating: userID	MovieID		Rating		TimeStamp
+//  movie record:	
+//	movie_id:int|title:chararray|release_date:chararray, video_release_date:chararray,
+//	imdb_url:chararray,unknown:int,action:int, adventure:int,animation:int,children:int,
+//	comedy:int,crime:int, documentary:int,drama:int,fantasy:int,film_noir:int,horror:int, 
+//	musical:int,mystery:int,romance:int,scifi:int,thriller:int, war:int,western:int
+	
+		
+
+User Mappper(LongWritable,TExt,IntWritable,Text)
+map(Key , Record,context)
+
+	String[] tokens = value.toString().split("\\|");
+	userID = Integer.parseInt(tokens[0]);
+	Occupation=tokens[3];
+	context(userID,"U"+"|"+Occupation)
+
+Ratining Mappper(LongWritable,TExt,IntWritable,Text)
+map(Key , value,context)
+	setup(context)
+	{
+	Read Movie Record from distributed Cashe	
+	
+	}
+	String record[] = value.toString().split("\t");
+	userID = tokens[0];
+	movieId=tokens[1];
+	Reduce Side join with movie record
+	context(userID,"R"+"|"Pass Movie Records")
+
+Reducer(userID,Text,Text,Text)
+	reduce(userID,Record Pipe delimeted){
+
+HashMap(Occuppation,CountGenereObj)
+
+	Create a custom CountGenere object (
+	action:int, 
+	adventure:int,
+	animation:int,
+	children:int,
+	comedy:int,
+	crime:int, 
+	documentary:int,
+	drama:int,
+	fantasy:int,
+	film_noir:int,
+	horror:int, 
+	musical:int,
+	mystery:int,
+	romance:int,
+	scifi:int,
+	thriller:int, 
+	war:int,
+	Western:int	
+	}
+
+
+
+RDJ
+hadoop jar OccupationWiseInterestDriver.jar trg.hadoop.OccupationWiseInterest.OccupationWiseInterestDriver /user/trg03/userData  /user/trg03/moviein /user/trg03/OccupationWiseInterestOut
+
+
+hadoop jar RatingDriver.jar trg.hadoop.PartitionerTrials.RatingDriver /user/trg03/moviein /user/trg03
