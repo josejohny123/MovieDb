@@ -43,9 +43,9 @@ public class RatingDriver extends Configured implements Tool{
 		
 		job.setPartitionerClass(KeyFieldBasedPartitioner.class);
 		
-		conf.set("mapreduce.partition.keypartitioner.options", "-k1,1");
+		conf.set("mapreduce.partition.keypartitioner.options", "-K 1,1");
 		conf.set("mapreduce.map.output.key.field.seperator", ",");
-		conf.set("num.key.fields.for.partition", "1");
+		conf.setInt("num.key.fields.for.partition", 1);
 		//mapreduce.partition.keypartitioner.options,"-k 1,1"
 		//mapreduce.map.output.key.field.seperator,","
 		//num.key.field.for.partition,"1"

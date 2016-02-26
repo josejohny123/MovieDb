@@ -29,6 +29,6 @@ public class RatingMapper extends Mapper<LongWritable, Text, Text, Text> {
 		// recTime = Long.valueOf(tokens[3]);
 
 			
-		context.write(new Text(KeyFields), new Text(value));
+		context.write(new Text(KeyFields), value);
 		}
 }

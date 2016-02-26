@@ -29,7 +29,7 @@ public class RatingMapJoinMovie extends Mapper<LongWritable, Text, IntWritable, 
 //	musical:int,mystery:int,romance:int,scifi:int,thriller:int, war:int,western:int
 	
 	
-	private Map<IntWritable,Text> movieMap = new HashMap<IntWritable, Text>();
+	private Map<Integer,Text> movieMap = new HashMap<Integer, Text>();
 
 	protected void setup(Context context) throws java.io.IOException, InterruptedException{
 		
@@ -45,10 +45,9 @@ public class RatingMapJoinMovie extends Mapper<LongWritable, Text, IntWritable, 
 				int movieID = 0;
 				Text movieItem =null;
 					while(line != null) {
-					movieItem=new Text(line);
 					String[] tokens = line.split("\\|");					
 					movieID=Integer.parseInt(tokens[0]);
-					movieMap.put(new IntWritable(movieID), movieItem);
+					movieMap.put(new Integer(movieID), new Text(line));
 					line = reader.readLine();
 				}
 				reader.close();
@@ -68,8 +67,8 @@ public class RatingMapJoinMovie extends Mapper<LongWritable, Text, IntWritable, 
 		
 		Integer userID=0,movieID = 0, rating = 0;
 //		String movieTitle = "";
-		Text movieItem=null;
 		String movieItemString;
+		Text movieItem=null;
 		String record[] = value.toString().split("\t");
 		
 		boolean valid = true;

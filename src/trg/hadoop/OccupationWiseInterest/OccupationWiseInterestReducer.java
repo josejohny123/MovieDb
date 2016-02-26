@@ -24,7 +24,7 @@ public class OccupationWiseInterestReducer extends Reducer<IntWritable, Text, Te
 				} else if (ratingArray[0].equals("U")) {
 					occupation=record;
 				}
-				context.write(occupation, movieDetails);
+				context.write(new Text(occupation), new Text(movieDetails));
 			}
 		
 		
